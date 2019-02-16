@@ -1,0 +1,5 @@
+ext {
+    apiKeys = [
+        themoviedb: "YOUR_API_KEY"
+    ]
+}
