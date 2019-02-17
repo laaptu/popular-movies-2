@@ -1,13 +1,15 @@
-package com.laaptu.popmovies;
+package com.laaptu.popmovies.moviedetail;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.laaptu.popmovies.R;
+
+public class MovieDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movie_detail);
     }
 }
