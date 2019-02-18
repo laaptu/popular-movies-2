@@ -26,7 +26,8 @@ ext {
     libs = [
         parcelerVersion: '1.1.12',
         daggerVersion  : '2.21',
-        retrofitVersion: '2.5.0'
+        retrofitVersion: '2.5.0',
+        butterKnifeVersion: '8.0.0'
     ]
 }
 
@@ -34,6 +35,12 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+
+    implementation "com.jakewharton:butterknife:$libs.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$libs.butterKnifeVersion"
+
     testImplementation 'junit:junit:4.12'
     implementation "org.parceler:parceler-api:$libs.parcelerVersion"
     annotationProcessor "org.parceler:parceler:$libs.parcelerVersion"
@@ -41,19 +48,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-
     implementation "com.squareup.retrofit2:retrofit:$libs.retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$libs.retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$libs.retrofitVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
-
-
     implementation "com.google.dagger:dagger-android:$libs.daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$libs.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$libs.daggerVersion"
-
     /* Dagger2 - default dependency */
     annotationProcessor "com.google.dagger:dagger-compiler:$libs.daggerVersion"
-
-
+    implementation 'com.jakewharton.timber:timber:4.7.1'
 }

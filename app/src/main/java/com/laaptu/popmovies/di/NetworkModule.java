@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkModule {
 
     @Provides
-    @Singleton
     static Retrofit getRetrofit(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
             .baseUrl(APIConstants.URL_BASE)
@@ -36,7 +35,6 @@ public class NetworkModule {
     }
 
     @Provides
-    @Singleton
     static Gson getGson() {
         return new GsonBuilder()
             .registerTypeAdapter(Movie.class, new MovieDeserializer())
@@ -44,7 +42,6 @@ public class NetworkModule {
     }
 
     @Provides
-    @Singleton
     static OkHttpClient getOkHttpClient() {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(Level.BODY);
