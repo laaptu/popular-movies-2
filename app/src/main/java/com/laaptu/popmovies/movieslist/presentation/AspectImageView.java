@@ -1,4 +1,4 @@
-package com.laaptu.popmovies.movieslist;
+package com.laaptu.popmovies.movieslist.presentation;
 
 import android.content.Context;
 import android.util.AttributeSet;

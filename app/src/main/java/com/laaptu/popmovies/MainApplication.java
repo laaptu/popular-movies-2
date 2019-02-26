@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
+import timber.log.Timber;
+import timber.log.Timber.DebugTree;
 
 public class MainApplication extends Application implements HasActivityInjector {
 
@@ -25,9 +27,6 @@ public class MainApplication extends Application implements HasActivityInjector 
     public void onCreate() {
         super.onCreate();
         DaggerAppComponent.builder().build().inject(this);
-        if(dispatchingAndroidInjector ==null)
-            System.out.println("ANdroid Injector null");
-        else
-            System.out.println("ANdroid injector not null");
+        Timber.plant(new DebugTree());
     }
 }

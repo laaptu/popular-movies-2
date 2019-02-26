@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Pop Movies</string>
     <string name="error_tap_to_retry">Error loading movies. Tap to retry !.</string>
+    <string name="error_fetch_movies">Error fetching movies.</string>
     <string name="popular">Popular</string>
     <string name="top_rated">Top Rated</string>
+    <string name="movie_detail">MovieDetail</string>
 </resources>

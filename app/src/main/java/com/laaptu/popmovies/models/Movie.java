@@ -16,11 +16,11 @@ public class Movie {
     @SerializedName("poster_path")
     public String imagePath = "";
     @SerializedName("popularity")
-    float popularity;
+    public float popularity;
     @SerializedName("vote_average")
-    float votes;
+    public float votes;
     @SerializedName("overview")
-    String overview = "";
+    public String overview = "";
     @SerializedName("release_date")
-    String releaseDate = "";
+    public String releaseDate = "";
 }
