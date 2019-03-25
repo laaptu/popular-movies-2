@@ -3,7 +3,7 @@ package com.laaptu.popmovies.movieslist.presentation;
 import android.content.Context;
 import android.util.AttributeSet;
 
-public class AspectImageView extends android.support.v7.widget.AppCompatImageView {
+public class AspectImageView extends androidx.appcompat.widget.AppCompatImageView {
     private static final float ratio = 1.4f;
 
     public AspectImageView(Context context) {

@@ -5,12 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 import org.parceler.Parcel.Serialization;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 @Parcel(Serialization.FIELD)
+@Entity
 public class Movie {
     @SerializedName("id")
+    @PrimaryKey
     public long movieId;
-    @SerializedName("video")
-    public boolean isVideo = false;
     @SerializedName("title")
     public String title = "";
     @SerializedName("poster_path")

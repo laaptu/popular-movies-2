@@ -2,6 +2,7 @@ package com.laaptu.popmovies;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 
 import com.laaptu.popmovies.di.DaggerAppComponent;
 
@@ -23,10 +24,19 @@ public class MainApplication extends Application implements HasActivityInjector 
         return dispatchingAndroidInjector;
     }
 
+    private static Context appContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        appContext = this;
         DaggerAppComponent.builder().build().inject(this);
         Timber.plant(new DebugTree());
     }
+
+    public static Context getAppContext() {
+        return appContext;
+    }
+
+
 }

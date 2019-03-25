@@ -8,8 +8,13 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "MOVIE_DB_API_KEY", "\"${rootProject.ext.apiKeys.themoviedb}\""
+        javaCompileOptions{
+            annotationProcessorOptions{
+                arguments =["room.schemaLocation":"$projectDir/schemas".toString()]
+            }
+        }
     }
     buildTypes {
         release {
@@ -21,32 +26,41 @@ android {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
     }
+
+
+
+
+
 }
 ext {
     libs = [
-        parcelerVersion: '1.1.12',
-        daggerVersion  : '2.21',
-        retrofitVersion: '2.5.0',
-        butterKnifeVersion: '8.0.0',
-        supportLibraryVersion: '28.0.0'
+        parcelerVersion      : '1.1.12',
+        daggerVersion        : '2.21',
+        rxjava2Version       : '2.2.6',
+        retrofitVersion      : '2.5.0',
+        butterKnifeVersion   : '8.0.0',
+        supportLibraryVersion: '1.0.2',
+        roomVersion          : '2.1.0-alpha04'
     ]
 }
 configurations.all {
     resolutionStrategy {
-        eachDependency { DependencyResolveDetails details ->
+        eachDependency {DependencyResolveDetails details ->
             if (details.requested.group == 'com.android.support')
                 details.useVersion "$libs.supportLibraryVersion"
+            if (details.requested.group == 'io.reactivex.rxjava2' && details.requested.name == 'rxjava')
+                details.useVersion "$libs.rxjava2Version"
         }
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "com.android.support:appcompat-v7:$libs.supportLibraryVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    implementation "com.android.support:recyclerview-v7:$libs.supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$libs.supportLibraryVersion"
-    implementation "com.android.support:design:$libs.supportLibraryVersion"
+    //implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "com.google.android.material:material:1.1.0-alpha04"
 
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup:otto:1.3.8'
@@ -57,8 +71,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation "org.parceler:parceler-api:$libs.parcelerVersion"
     annotationProcessor "org.parceler:parceler:$libs.parcelerVersion"
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.2-alpha02'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha02'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.6'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation "com.squareup.retrofit2:retrofit:$libs.retrofitVersion"
@@ -71,4 +85,10 @@ dependencies {
     /* Dagger2 - default dependency */
     annotationProcessor "com.google.dagger:dagger-compiler:$libs.daggerVersion"
     implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    //room
+    implementation "androidx.room:room-runtime:$libs.roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$libs.roomVersion"
+    //RxJava support for Room
+    implementation "androidx.room:room-rxjava2:$libs.roomVersion"
 }
