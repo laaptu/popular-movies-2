@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.laaptu.popmovies.R;
 import com.laaptu.popmovies.common.AutoInjectActivity;
+import com.laaptu.popmovies.db.MovieDao;
 import com.laaptu.popmovies.models.Movie;
 import com.laaptu.popmovies.moviedetail.MovieDetailActivity;
 import com.laaptu.popmovies.movieslist.domain.MovieListUIModel.ListType;
@@ -29,6 +31,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 public class MoviesListActivity extends AutoInjectActivity {
 
@@ -45,6 +49,9 @@ public class MoviesListActivity extends AutoInjectActivity {
     @BindView(R.id.txt_error)
     TextView tvErrorView;
 
+    @Inject
+    MovieDao movieDao;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -55,6 +62,7 @@ public class MoviesListActivity extends AutoInjectActivity {
         super.onCreate(savedInstanceState);
         swipeRefreshLayout.setEnabled(false);
         fetchMovies(ListType.Popular);
+
     }
 
     @Override

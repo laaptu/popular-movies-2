@@ -3,6 +3,7 @@ package com.laaptu.popmovies.di;
 import android.content.Context;
 
 import com.laaptu.popmovies.MainApplication;
+import com.laaptu.popmovies.db.MovieDao;
 import com.laaptu.popmovies.db.MoviesDatabase;
 import com.squareup.otto.Bus;
 
@@ -21,16 +22,22 @@ public class AppModule {
         return new Bus();
     }
 
-//    @Provides
-//    public static Context getAppContext() {
-//        return MainApplication.getAppContext();
-//    }
-//
-//    @Singleton
-//    @Provides
-//    public static MoviesDatabase getMoviesDatabase(Context context) {
-//        return Room.databaseBuilder(context, MoviesDatabase.class,
-//            MoviesDatabase.DB_NAME).build();
-//    }
+    @Provides
+    public static Context getAppContext() {
+        return MainApplication.getAppContext();
+    }
+
+    @Singleton
+    @Provides
+    static MoviesDatabase getMoviesDatabase(Context context) {
+        return Room.databaseBuilder(context, MoviesDatabase.class,
+            MoviesDatabase.DB_NAME).build();
+    }
+
+    @Singleton
+    @Provides
+    public static MovieDao getMovieDao(MoviesDatabase moviesDatabase) {
+        return moviesDatabase.getMovieDao();
+    }
 
 }
