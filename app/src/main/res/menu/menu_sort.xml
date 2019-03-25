@@ -13,5 +13,10 @@
             android:orderInCategory="1"
             android:title="@string/top_rated"
             app:showAsAction="withText" />
+        <item
+            android:id="@+id/menu_item_favorites"
+            android:orderInCategory="2"
+            android:title="@string/favorites"
+            app:showAsAction="withText" />
     </group>
 </menu>

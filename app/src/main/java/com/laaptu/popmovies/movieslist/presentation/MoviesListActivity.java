@@ -119,7 +119,9 @@ public class MoviesListActivity extends AutoInjectActivity {
             case R.id.menu_item_top_rated:
                 fetchMovies(ListType.TopRated);
                 break;
-
+            case R.id.menu_item_favorites:
+                fetchMovies(ListType.Favorites);
+                break;
         }
         return true;
     }

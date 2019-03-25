@@ -2,10 +2,10 @@ package com.laaptu.popmovies.movieslist.domain;
 
 import com.laaptu.popmovies.R;
 import com.laaptu.popmovies.models.Movie;
-import com.laaptu.popmovies.models.MoviesList;
 import com.laaptu.popmovies.movieslist.domain.MovieListUIModel.ListType;
 import com.laaptu.popmovies.movieslist.domain.MovieListUIModel.ViewState;
-import com.laaptu.popmovies.network.MovieApiService;
+import com.laaptu.popmovies.movieslist.domain.interactors.FavoriteMovieInteraction;
+import com.laaptu.popmovies.movieslist.domain.interactors.MovieApiServiceInteraction;
 
 import java.util.List;
 
@@ -20,7 +20,8 @@ import io.reactivex.subjects.PublishSubject;
 
 public class MoviesListViewModel {
 
-    private MovieApiService movieApiService;
+    private MovieApiServiceInteraction movieApiService;
+    private FavoriteMovieInteraction favoriteMovieInteraction;
 
     private BehaviorSubject<Boolean> progressUISubject;
     private BehaviorSubject<Boolean> errorUISubject;
@@ -31,8 +32,9 @@ public class MoviesListViewModel {
     private MovieListUIModel movieListUIModel = new MovieListUIModel(ViewState.Empty, ListType.Popular);
 
     @Inject
-    public MoviesListViewModel(MovieApiService movieApiService) {
+    public MoviesListViewModel(MovieApiServiceInteraction movieApiService, FavoriteMovieInteraction favoriteMovieInteraction) {
         this.movieApiService = movieApiService;
+        this.favoriteMovieInteraction = favoriteMovieInteraction;
 
         progressUISubject = BehaviorSubject.createDefault(false);
         errorUISubject = BehaviorSubject.createDefault(false);
@@ -47,15 +49,13 @@ public class MoviesListViewModel {
             showProgress(true);
             showErrorUI(false);
 
-            Single<MoviesList> remoteMoviesList = listType == ListType.Popular ? movieApiService.getPopularMovies() :
-                movieApiService.getTopRatedMovies();
-            remoteMoviesList.subscribeOn(Schedulers.computation())
+            getMovieFetchService(listType).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     movies -> {
                         movieListUIModel.setLoadedStateWithListType(listType);
                         showProgress(false);
-                        moviesListPublishSubject.onNext(movies.movies);
+                        moviesListPublishSubject.onNext(movies);
                     }
                     , error -> {
                         showProgress(false);
@@ -66,6 +66,17 @@ public class MoviesListViewModel {
                             snackBarTextSubject.onNext(R.string.error_fetch_movies);
                         }
                     });
+        }
+    }
+
+    private Single<List<Movie>> getMovieFetchService(ListType listType) {
+        switch (listType) {
+            case Favorites:
+                return favoriteMovieInteraction.execute();
+            case TopRated:
+                return movieApiService.getTopRatedMovies();
+            default:
+                return movieApiService.getPopularMovies();
         }
     }
 

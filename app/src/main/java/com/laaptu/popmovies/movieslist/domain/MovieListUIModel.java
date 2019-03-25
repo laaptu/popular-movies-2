@@ -1,9 +1,5 @@
 package com.laaptu.popmovies.movieslist.domain;
 
-import com.laaptu.popmovies.models.Movie;
-
-import java.util.List;
-
 public class MovieListUIModel {
     public enum ViewState {
         Empty,
@@ -15,7 +11,8 @@ public class MovieListUIModel {
 
     public enum ListType {
         Popular,
-        TopRated
+        TopRated,
+        Favorites
     }
 
     public ViewState viewState;
