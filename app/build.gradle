@@ -39,15 +39,12 @@ ext {
         rxjava2Version       : '2.2.6',
         retrofitVersion      : '2.5.0',
         butterKnifeVersion   : '8.0.0',
-        supportLibraryVersion: '1.0.2',
         roomVersion          : '2.1.0-alpha04'
     ]
 }
 configurations.all {
     resolutionStrategy {
         eachDependency {DependencyResolveDetails details ->
-            if (details.requested.group == 'com.android.support')
-                details.useVersion "$libs.supportLibraryVersion"
             if (details.requested.group == 'io.reactivex.rxjava2' && details.requested.name == 'rxjava')
                 details.useVersion "$libs.rxjava2Version"
         }
