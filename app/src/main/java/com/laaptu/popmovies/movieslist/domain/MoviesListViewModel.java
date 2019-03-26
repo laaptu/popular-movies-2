@@ -1,6 +1,7 @@
 package com.laaptu.popmovies.movieslist.domain;
 
 import com.laaptu.popmovies.R;
+import com.laaptu.popmovies.common.LiveDataMutable;
 import com.laaptu.popmovies.models.Movie;
 import com.laaptu.popmovies.movieslist.domain.MovieListUIModel.ListType;
 import com.laaptu.popmovies.movieslist.domain.MovieListUIModel.ViewState;
@@ -11,6 +12,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -24,24 +27,27 @@ public class MoviesListViewModel extends ViewModel {
     private MovieApiServiceInteraction movieApiService;
     private FavoriteMovieInteraction favoriteMovieInteraction;
 
-    private BehaviorSubject<Boolean> progressUISubject;
-    private BehaviorSubject<Boolean> errorUISubject;
+    private LiveDataMutable<Boolean> progressUISubject = new LiveDataMutable<>(false);
+    private LiveDataMutable<Boolean> errorUISubject = new LiveDataMutable<>(false);
     private PublishSubject<Integer> snackBarTextSubject;
 
-    private PublishSubject<List<Movie>> moviesListPublishSubject;
+    private LiveDataMutable<List<Movie>> moviesListPublishSubject = new LiveDataMutable<>();
+    private LiveDataMutable<MovieListUIModel> movieListUIModelLiveDataMutable = new LiveDataMutable<>(
+        new MovieListUIModel(ViewState.Empty, ListType.Popular)
+    );
 
-    private MovieListUIModel movieListUIModel = new MovieListUIModel(ViewState.Empty, ListType.Popular);
+    private MovieListUIModel movieListUIModel = movieListUIModelLiveDataMutable.getValue();
 
     @Inject
     public MoviesListViewModel(MovieApiServiceInteraction movieApiService, FavoriteMovieInteraction favoriteMovieInteraction) {
         this.movieApiService = movieApiService;
         this.favoriteMovieInteraction = favoriteMovieInteraction;
-
-        progressUISubject = BehaviorSubject.createDefault(false);
-        errorUISubject = BehaviorSubject.createDefault(false);
-
-        moviesListPublishSubject = PublishSubject.create();
         snackBarTextSubject = PublishSubject.create();
+
+    }
+
+    public void init() {
+        fetchMovies(movieListUIModel.listType);
     }
 
     public void fetchMovies(final ListType listType) {
@@ -56,19 +62,20 @@ public class MoviesListViewModel extends ViewModel {
                     movies -> {
                         movieListUIModel.setLoadedStateWithListType(listType);
                         showProgress(false);
-                        moviesListPublishSubject.onNext(movies);
+                        moviesListPublishSubject.postValue(movies);
                     }
                     , error -> {
                         showProgress(false);
-                        if (movieListUIModel.setErrorState())
+                        if (movieListUIModel.setErrorState()) {
                             showErrorUI(true);
-                        else {
+                        } else {
                             movieListUIModel.viewState = ViewState.Loaded;
                             snackBarTextSubject.onNext(R.string.error_fetch_movies);
                         }
                     });
         }
     }
+
 
     private Single<List<Movie>> getMovieFetchService(ListType listType) {
         switch (listType) {
@@ -87,19 +94,19 @@ public class MoviesListViewModel extends ViewModel {
 
 
     private void showProgress(boolean show) {
-        progressUISubject.onNext(show);
+        progressUISubject.postValue(show);
     }
 
     private void showErrorUI(boolean show) {
-        errorUISubject.onNext(show);
+        errorUISubject.postValue(show);
     }
 
 
-    public Observable<Boolean> getProgressUISubject() {
+    public LiveDataMutable<Boolean> getProgressUISubject() {
         return progressUISubject;
     }
 
-    public Observable<Boolean> getErrorUISubject() {
+    public LiveDataMutable<Boolean> getErrorUISubject() {
         return errorUISubject;
     }
 
@@ -107,7 +114,7 @@ public class MoviesListViewModel extends ViewModel {
         return snackBarTextSubject;
     }
 
-    public Observable<List<Movie>> getMoviesListSubject() {
+    public LiveDataMutable<List<Movie>> getMoviesListSubject() {
         return moviesListPublishSubject;
     }
 }

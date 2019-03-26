@@ -24,8 +24,7 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".movieslist.presentation.MoviesListActivity"
-            android:screenOrientation="portrait">
+            android:name=".movieslist.presentation.MoviesListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

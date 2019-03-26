@@ -54,8 +54,18 @@ public class MoviesListActivity extends AutoInjectActivity {
         super.onCreate(savedInstanceState);
         moviesListViewModel = getViewModel(MoviesListViewModel.class);
         swipeRefreshLayout.setEnabled(false);
-        fetchMovies(ListType.Popular);
+        //fetchMovies(ListType.Popular);
 
+        moviesListViewModel.getProgressUISubject().observe(this, refresh ->
+            swipeRefreshLayout.setRefreshing(refresh)
+        );
+        moviesListViewModel.getErrorUISubject().observe(this, showError ->
+            tvErrorView.setVisibility(showError ? View.VISIBLE : View.GONE));
+
+        moviesListViewModel.getMoviesListSubject().observe(this,movies ->
+            populateMovieListView(movies));
+
+        moviesListViewModel.init();
     }
 
     @Override
@@ -69,30 +79,11 @@ public class MoviesListActivity extends AutoInjectActivity {
     protected void onResume() {
         super.onResume();
 
-        Disposable disposable = getMainThreadSubscription(moviesListViewModel.getErrorUISubject()).subscribe(
-            showError ->
-                tvErrorView.setVisibility(showError ? View.VISIBLE : View.GONE)
-        );
-        addDisposable(disposable);
-
-        disposable = getMainThreadSubscription(moviesListViewModel.getProgressUISubject()).subscribe(
-            showProgress -> swipeRefreshLayout.setRefreshing(showProgress)
-        );
-        addDisposable(disposable);
-
-        disposable = moviesListViewModel.getSnackBarTextSubject()
+        Disposable disposable = moviesListViewModel.getSnackBarTextSubject()
             .subscribe(
                 stringResource -> showInfo(stringResource)
             );
-
         addDisposable(disposable);
-
-        disposable = moviesListViewModel.getMoviesListSubject().subscribe(
-            movies -> populateMovieListView(movies)
-        );
-
-        addDisposable(disposable);
-
         bus.register(this);
 
     }
