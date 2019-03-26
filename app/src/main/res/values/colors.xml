@@ -6,4 +6,7 @@
     <color name="colorTextPrimary">@android:color/white</color>
     <color name="green">#199588</color>
     <color name="grey">#747474</color>
+    
+    <color name="red">#DE1212</color>
+    <color name="grey_disabled">#CCC6C6</color>
 </resources>

@@ -7,4 +7,6 @@
     <string name="movie_detail">MovieDetail</string>
     <string name="favorites">Favorites</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="trailers">Trailers:</string>
+    <string name="trailer">Trailer %d</string>
 </resources>

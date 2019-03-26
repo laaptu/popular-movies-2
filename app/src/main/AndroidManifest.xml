@@ -33,9 +33,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".moviedetail.MovieDetailActivity"
-            android:label="@string/movie_detail"
-            android:screenOrientation="portrait" />
+            android:name=".moviedetail.presentation.MovieDetailActivity"
+            android:label="@string/movie_detail"/>
     </application>
 
 </manifest>

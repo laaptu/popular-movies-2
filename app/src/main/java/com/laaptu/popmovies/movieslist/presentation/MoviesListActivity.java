@@ -11,9 +11,9 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.laaptu.popmovies.R;
 import com.laaptu.popmovies.common.AutoInjectActivity;
-import com.laaptu.popmovies.db.MovieDao;
+import com.laaptu.popmovies.common.ScreenReturnConstants;
 import com.laaptu.popmovies.models.Movie;
-import com.laaptu.popmovies.moviedetail.MovieDetailActivity;
+import com.laaptu.popmovies.moviedetail.presentation.MovieDetailActivity;
 import com.laaptu.popmovies.movieslist.domain.MovieListUIModel.ListType;
 import com.laaptu.popmovies.movieslist.domain.MoviesListViewModel;
 import com.squareup.otto.Bus;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -44,6 +45,7 @@ public class MoviesListActivity extends AutoInjectActivity {
     @BindView(R.id.txt_error)
     TextView tvErrorView;
 
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
@@ -54,7 +56,6 @@ public class MoviesListActivity extends AutoInjectActivity {
         super.onCreate(savedInstanceState);
         moviesListViewModel = getViewModel(MoviesListViewModel.class);
         swipeRefreshLayout.setEnabled(false);
-        //fetchMovies(ListType.Popular);
 
         moviesListViewModel.getProgressUISubject().observe(this, refresh ->
             swipeRefreshLayout.setRefreshing(refresh)
@@ -62,7 +63,7 @@ public class MoviesListActivity extends AutoInjectActivity {
         moviesListViewModel.getErrorUISubject().observe(this, showError ->
             tvErrorView.setVisibility(showError ? View.VISIBLE : View.GONE));
 
-        moviesListViewModel.getMoviesListSubject().observe(this,movies ->
+        moviesListViewModel.getMoviesListSubject().observe(this, movies ->
             populateMovieListView(movies));
 
         moviesListViewModel.init();
@@ -122,9 +123,15 @@ public class MoviesListActivity extends AutoInjectActivity {
     @Subscribe
     public void onMovieSelected(Movie movie) {
         Intent movieDetailIntent = MovieDetailActivity.getLaunchingIntent(this, movie);
-        startActivity(movieDetailIntent);
+        startActivityForResult(movieDetailIntent, ScreenReturnConstants.RETURN_FROM_MOVIE_DETAIL);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ScreenReturnConstants.RETURN_FROM_MOVIE_DETAIL)
+            moviesListViewModel.refetchMovies();
+    }
 
     private void populateMovieListView(List<Movie> movieList) {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, getColumnWidth());

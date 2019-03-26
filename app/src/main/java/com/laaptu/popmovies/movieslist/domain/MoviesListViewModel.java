@@ -33,7 +33,7 @@ public class MoviesListViewModel extends ViewModel {
 
     private LiveDataMutable<List<Movie>> moviesListPublishSubject = new LiveDataMutable<>();
     private LiveDataMutable<MovieListUIModel> movieListUIModelLiveDataMutable = new LiveDataMutable<>(
-        new MovieListUIModel(ViewState.Empty, ListType.Popular)
+        new MovieListUIModel(ViewState.Empty, ListType.Favorites)
     );
 
     private MovieListUIModel movieListUIModel = movieListUIModelLiveDataMutable.getValue();
@@ -52,28 +52,38 @@ public class MoviesListViewModel extends ViewModel {
 
     public void fetchMovies(final ListType listType) {
         if (movieListUIModel.isViewStateReadyForLoading(listType)) {
-            movieListUIModel.setLoadingState();
-            showProgress(true);
-            showErrorUI(false);
-
-            getMovieFetchService(listType).subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    movies -> {
-                        movieListUIModel.setLoadedStateWithListType(listType);
-                        showProgress(false);
-                        moviesListPublishSubject.postValue(movies);
-                    }
-                    , error -> {
-                        showProgress(false);
-                        if (movieListUIModel.setErrorState()) {
-                            showErrorUI(true);
-                        } else {
-                            movieListUIModel.viewState = ViewState.Loaded;
-                            snackBarTextSubject.onNext(R.string.error_fetch_movies);
-                        }
-                    });
+            getMoviesByType(listType);
         }
+    }
+
+    public void refetchMovies() {
+        if (movieListUIModel.listType == ListType.Favorites) {
+            getMoviesByType(movieListUIModel.listType);
+        }
+    }
+
+    private void getMoviesByType(ListType listType) {
+        movieListUIModel.setLoadingState();
+        showProgress(true);
+        showErrorUI(false);
+
+        getMovieFetchService(listType).subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                movies -> {
+                    movieListUIModel.setLoadedStateWithListType(listType);
+                    showProgress(false);
+                    moviesListPublishSubject.postValue(movies);
+                }
+                , error -> {
+                    showProgress(false);
+                    if (movieListUIModel.setErrorState()) {
+                        showErrorUI(true);
+                    } else {
+                        movieListUIModel.viewState = ViewState.Loaded;
+                        snackBarTextSubject.onNext(R.string.error_fetch_movies);
+                    }
+                });
     }
 
 
@@ -92,7 +102,6 @@ public class MoviesListViewModel extends ViewModel {
         fetchMovies(movieListUIModel.listType);
     }
 
-
     private void showProgress(boolean show) {
         progressUISubject.postValue(show);
     }
@@ -100,7 +109,6 @@ public class MoviesListViewModel extends ViewModel {
     private void showErrorUI(boolean show) {
         errorUISubject.postValue(show);
     }
-
 
     public LiveDataMutable<Boolean> getProgressUISubject() {
         return progressUISubject;
