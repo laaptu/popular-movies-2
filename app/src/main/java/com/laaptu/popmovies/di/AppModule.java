@@ -5,6 +5,7 @@ import android.content.Context;
 import com.laaptu.popmovies.MainApplication;
 import com.laaptu.popmovies.db.MovieDao;
 import com.laaptu.popmovies.db.MoviesDatabase;
+import com.laaptu.popmovies.di.viewmodel.ViewModelModule;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -13,7 +14,7 @@ import androidx.room.Room;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = {ViewModelModule.class})
 public class AppModule {
 
     @Singleton

@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.lifecycle.ViewModel;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,7 +19,7 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.BehaviorSubject;
 import io.reactivex.subjects.PublishSubject;
 
-public class MoviesListViewModel {
+public class MoviesListViewModel extends ViewModel {
 
     private MovieApiServiceInteraction movieApiService;
     private FavoriteMovieInteraction favoriteMovieInteraction;

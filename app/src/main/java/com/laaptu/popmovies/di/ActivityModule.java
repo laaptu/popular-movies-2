@@ -1,5 +1,6 @@
 package com.laaptu.popmovies.di;
 
+import com.laaptu.popmovies.TestActivity;
 import com.laaptu.popmovies.moviedetail.MovieDetailActivity;
 import com.laaptu.popmovies.movieslist.presentation.MoviesListActivity;
 
@@ -13,4 +14,7 @@ public abstract class ActivityModule {
 
     @ContributesAndroidInjector
     abstract MovieDetailActivity bindMovieDetailActivity();
+
+    @ContributesAndroidInjector
+    abstract TestActivity bindTestActivity();
 }

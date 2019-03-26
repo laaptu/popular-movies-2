@@ -1,9 +1,17 @@
 package com.laaptu.popmovies.common;
 
 import android.os.Bundle;
+
+import com.laaptu.popmovies.di.viewmodel.ViewModelCreator;
+
+import javax.inject.Inject;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.ButterKnife;
 import dagger.android.AndroidInjection;
 import io.reactivex.Observable;
@@ -17,6 +25,9 @@ public abstract class AutoInjectActivity extends AppCompatActivity {
     public abstract int getLayoutId();
 
     private CompositeDisposable disposables = new CompositeDisposable();
+
+    @Inject
+    ViewModelCreator viewModelCreator;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,5 +47,9 @@ public abstract class AutoInjectActivity extends AppCompatActivity {
 
     public void clearDisposable() {
         disposables.clear();
+    }
+
+    public <T extends ViewModel> T getViewModel(Class<T> clazz) {
+        return ViewModelProviders.of(this, viewModelCreator).get(clazz);
     }
 }
