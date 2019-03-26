@@ -1,6 +1,7 @@
 package com.laaptu.popmovies.common;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.laaptu.popmovies.di.viewmodel.ViewModelCreator;
 
@@ -51,5 +52,12 @@ public abstract class AutoInjectActivity extends AppCompatActivity {
 
     public <T extends ViewModel> T getViewModel(Class<T> clazz) {
         return ViewModelProviders.of(this, viewModelCreator).get(clazz);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+            onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }

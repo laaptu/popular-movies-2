@@ -6,7 +6,8 @@
     <string name="top_rated">Top Rated</string>
     <string name="movie_detail">MovieDetail</string>
     <string name="favorites">Favorites</string>
-    <string name="title_activity_test">TestActivity</string>
+    <string name="title_review_activity">Reviews</string>
     <string name="trailers">Trailers:</string>
     <string name="trailer">Trailer %d</string>
+    <string name="reviews">Reviews</string>
 </resources>

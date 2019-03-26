@@ -19,6 +19,7 @@ import com.laaptu.popmovies.models.Movie;
 import com.laaptu.popmovies.models.Trailer;
 import com.laaptu.popmovies.moviedetail.domain.MovieDetailViewModel;
 import com.laaptu.popmovies.moviedetail.presentation.TrailerListAdapter.TrailerItemViewHolder;
+import com.laaptu.popmovies.moviereviews.presentation.MovieReviewActivity;
 import com.laaptu.popmovies.movieslist.presentation.AspectImageView;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -35,6 +36,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.laaptu.popmovies.common.ScreenConstants.EXTRA_MOVIE;
 
 public class MovieDetailActivity extends AutoInjectActivity {
 
@@ -55,8 +58,6 @@ public class MovieDetailActivity extends AutoInjectActivity {
     TextView txtTrailerTitle;
     @BindView(R.id.rv_trailers)
     RecyclerView trailersList;
-
-    public static final String EXTRA_MOVIE = "Movie";
 
     @Inject
     Bus bus;
@@ -134,6 +135,11 @@ public class MovieDetailActivity extends AutoInjectActivity {
         movieDetailViewModel.toggleFavorite(movie);
     }
 
+    @OnClick(R.id.btn_reviews)
+    public void onReviewsClicked(View view) {
+        startActivity(MovieReviewActivity.getLaunchingIntent(this, movie));
+    }
+
     private void populateTrailers(List<Trailer> trailers) {
         if (trailers.size() == 0)
             return;
@@ -145,13 +151,6 @@ public class MovieDetailActivity extends AutoInjectActivity {
         trailersList.setLayoutManager(linearLayoutManager);
         TrailerListAdapter trailerListAdapter = new TrailerListAdapter(trailers, bus);
         trailersList.setAdapter(trailerListAdapter);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home)
-            onBackPressed();
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.laaptu.popmovies.R;
 import com.laaptu.popmovies.common.AutoInjectActivity;
-import com.laaptu.popmovies.common.ScreenReturnConstants;
+import com.laaptu.popmovies.common.ScreenConstants;
 import com.laaptu.popmovies.models.Movie;
 import com.laaptu.popmovies.moviedetail.presentation.MovieDetailActivity;
 import com.laaptu.popmovies.movieslist.domain.MovieListUIModel.ListType;
@@ -123,13 +123,13 @@ public class MoviesListActivity extends AutoInjectActivity {
     @Subscribe
     public void onMovieSelected(Movie movie) {
         Intent movieDetailIntent = MovieDetailActivity.getLaunchingIntent(this, movie);
-        startActivityForResult(movieDetailIntent, ScreenReturnConstants.RETURN_FROM_MOVIE_DETAIL);
+        startActivityForResult(movieDetailIntent, ScreenConstants.RETURN_FROM_MOVIE_DETAIL);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ScreenReturnConstants.RETURN_FROM_MOVIE_DETAIL)
+        if (requestCode == ScreenConstants.RETURN_FROM_MOVIE_DETAIL)
             moviesListViewModel.refetchMovies();
     }
 
