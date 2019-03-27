@@ -10,4 +10,6 @@
     <string name="trailers">Trailers:</string>
     <string name="trailer">Trailer %d</string>
     <string name="reviews">Reviews</string>
+    <string name="transition_thumb">ThumbNailTransition</string>
+    <string name="empty_movies">This category doesn\'t contain any Movies</string>
 </resources>

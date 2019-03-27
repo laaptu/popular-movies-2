@@ -57,7 +57,7 @@ public abstract class AutoInjectActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home)
-            onBackPressed();
+            supportFinishAfterTransition();
         return super.onOptionsItemSelected(item);
     }
 }

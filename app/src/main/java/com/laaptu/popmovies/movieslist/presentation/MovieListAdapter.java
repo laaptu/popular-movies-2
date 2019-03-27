@@ -1,14 +1,17 @@
 package com.laaptu.popmovies.movieslist.presentation;
 
 import androidx.annotation.NonNull;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.laaptu.popmovies.R;
 import com.laaptu.popmovies.common.image.ImageLoadOptions;
 import com.laaptu.popmovies.common.image.ImageLoader;
 import com.laaptu.popmovies.models.Movie;
+import com.laaptu.popmovies.movieslist.ItemClickInfo;
 import com.laaptu.popmovies.movieslist.presentation.MovieListAdapter.MovieItemViewHolder;
 import com.squareup.otto.Bus;
 
@@ -70,7 +73,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieItemViewHolder> 
 
         @OnClick(R.id.img_thumb)
         public void onThumbClicked() {
-            bus.post(movie);
+            bus.post(new ItemClickInfo<Movie, ImageView>(movie, imgThumb));
         }
     }
 }

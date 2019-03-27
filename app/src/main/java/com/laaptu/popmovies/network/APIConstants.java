@@ -4,7 +4,6 @@ public class APIConstants {
     public static final String QUERY_API_KEY = "api_key";
     public static final String URL_BASE = "https://api.themoviedb.org/3/";
     public static final String URL_BASE_IMAGE_PATH = "https://image.tmdb.org/t/p/w342";
-    public static final String URL_YOUTUBE = "https://www.youtube.com/watch?v=%s";
     public static final String PATH_POPULAR_MOVIES = "movie/popular";
     public static final String PATH_TOP_RATED_MOVIES = "movie/top_rated";
     public static final String PATH_PARAM_MOVIE_ID = "movie_id";

@@ -33,7 +33,7 @@ public class MoviesListViewModel extends ViewModel {
 
     private LiveDataMutable<List<Movie>> moviesListPublishSubject = new LiveDataMutable<>();
     private LiveDataMutable<MovieListUIModel> movieListUIModelLiveDataMutable = new LiveDataMutable<>(
-        new MovieListUIModel(ViewState.Empty, ListType.Favorites)
+        new MovieListUIModel(ViewState.Empty, ListType.Popular)
     );
 
     private MovieListUIModel movieListUIModel = movieListUIModelLiveDataMutable.getValue();
@@ -74,6 +74,8 @@ public class MoviesListViewModel extends ViewModel {
                     movieListUIModel.setLoadedStateWithListType(listType);
                     showProgress(false);
                     moviesListPublishSubject.postValue(movies);
+                    if (movies.size() == 0)
+                        snackBarTextSubject.onNext(R.string.empty_movies);
                 }
                 , error -> {
                     showProgress(false);

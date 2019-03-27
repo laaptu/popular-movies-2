@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 
 public class AspectImageView extends androidx.appcompat.widget.AppCompatImageView {
     private static final float ratio = 1.4f;
+    private int newMeasuredHeight = -1;
 
     public AspectImageView(Context context) {
         super(context);
@@ -21,7 +22,9 @@ public class AspectImageView extends androidx.appcompat.widget.AppCompatImageVie
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int newMeasuredHeight = (int) (getMeasuredHeight() * ratio);
-        setMeasuredDimension(getMeasuredWidth(), newMeasuredHeight);
+        if (newMeasuredHeight < 0) {
+            newMeasuredHeight = (int) (getMeasuredHeight() * ratio);
+            setMeasuredDimension(getMeasuredWidth(), newMeasuredHeight);
+        }
     }
 }

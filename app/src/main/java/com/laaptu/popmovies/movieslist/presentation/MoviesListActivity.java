@@ -6,6 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -14,6 +15,7 @@ import com.laaptu.popmovies.common.AutoInjectActivity;
 import com.laaptu.popmovies.common.ScreenConstants;
 import com.laaptu.popmovies.models.Movie;
 import com.laaptu.popmovies.moviedetail.presentation.MovieDetailActivity;
+import com.laaptu.popmovies.movieslist.ItemClickInfo;
 import com.laaptu.popmovies.movieslist.domain.MovieListUIModel.ListType;
 import com.laaptu.popmovies.movieslist.domain.MoviesListViewModel;
 import com.squareup.otto.Bus;
@@ -24,6 +26,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -121,9 +124,11 @@ public class MoviesListActivity extends AutoInjectActivity {
     }
 
     @Subscribe
-    public void onMovieSelected(Movie movie) {
-        Intent movieDetailIntent = MovieDetailActivity.getLaunchingIntent(this, movie);
-        startActivityForResult(movieDetailIntent, ScreenConstants.RETURN_FROM_MOVIE_DETAIL);
+    public void onMovieSelected(ItemClickInfo<Movie, ImageView> itemClickInfo) {
+        Intent movieDetailIntent = MovieDetailActivity.getLaunchingIntent(this, itemClickInfo.item);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+            makeSceneTransitionAnimation(this, itemClickInfo.view, getString(R.string.transition_thumb));
+        startActivityForResult(movieDetailIntent, ScreenConstants.RETURN_FROM_MOVIE_DETAIL, options.toBundle());
     }
 
     @Override
